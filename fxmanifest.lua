@@ -27,6 +27,7 @@ server_scripts {
     'server/modules/logger.lua',
     'server/modules/stash.lua',
     'server/modules/society.lua',
+    'server/modules/storage.lua',
     'server/modules/vehicle_extras.lua',
 }
 
