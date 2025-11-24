@@ -1,187 +1,383 @@
-# FiveM Universal Bridge System
+<div align="center">
 
-QB-Core、ESX、QBox、Standaloneに対応した統合ブリッジシステム
+# 🌉 in_bridge
 
-## 🌟 特徴
+### FiveM Universal Bridge System
 
-- **マルチフレームワーク対応**: QB-Core, ESX, QBox, Standalone
-- **インベントリシステム対応**: ox_inventory, qb-inventory, qs-inventory
-- **通知システム対応**: ox_lib, qb-core, esx, okokNotify, ss_notify
-- **TextUI対応**: ox_lib, okokTextUI, jg-textui, ss_textui, qb-core
-- **Target対応**: ox_target, qb-target, qtarget
-- **Progress Bar対応**: ox_lib, progressbar, qb-core, esx_progressbar
-- **Input/Menu対応**: ox_lib, qb-input, qb-menu, nh-context
-- **Fuel対応**: LegacyFuel, ox_fuel, ps-fuel, cdn-fuel, qs-fuelstations
-- **Vehicle Keys対応**: qb-vehiclekeys, qs-vehiclekeys, cd_garage, wasabi_carlock
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/ImmersionNexus/in_bridge/releases)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![FiveM](https://img.shields.io/badge/FiveM-Ready-orange.svg)](https://fivem.net/)
+[![Lua](https://img.shields.io/badge/Lua-5.4-purple.svg)](https://www.lua.org/)
 
-## 📁 ファイル構造
+**QB-Core • ESX • QBox • Standalone**
 
+[📖 Documentation](#-usage) • [🚀 Installation](#-installation) • [🐛 Issues](https://github.com/ImmersionNexus/in_bridge/issues)
+
+---
+
+_Build framework-independent FiveM resources with ease_
+
+[🇯🇵 日本語版はこちら](README_JP.md)
+
+</div>
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎯 Multi-Framework Support
+
+- QB-Core
+- ESX (es_extended)
+- QBox
+- Standalone
+
+</td>
+<td width="50%">
+
+### 📦 Inventory Systems
+
+- ox_inventory
+- qb-inventory
+- qs-inventory
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🔔 Notification Systems
+
+- ox_lib
+- QB-Core
+- ESX
+- okokNotify
+- ss_notify
+- in_notify
+
+</td>
+<td>
+
+### 🎯 Target Systems
+
+- ox_target
+- qb-target
+- qtarget
+
+</td>
+</tr>
+<tr>
+<td>
+
+### ⏳ Progress Bars
+
+- ox_lib
+- progressbar
+- QB-Core
+- esx_progressbar
+
+</td>
+<td>
+
+### 📝 Input/Menu
+
+- ox_lib
+- qb-input
+- qb-menu
+- nh-context
+
+</td>
+</tr>
+<tr>
+<td>
+
+### ⛽ Fuel Systems
+
+- LegacyFuel
+- ox_fuel
+- ps-fuel
+- cdn-fuel
+- qs-fuelstations
+
+</td>
+<td>
+
+### 🔑 Vehicle Keys
+
+- qb-vehiclekeys
+- qs-vehiclekeys
+- cd_garage
+- wasabi_carlock
+
+</td>
+</tr>
+</table>
+
+---
+
+## 📊 Statistics
+
+| Item                 | Count             |
+| -------------------- | ----------------- |
+| 📁 Total Files       | 27+               |
+| 🔧 Export Functions  | 80+               |
+| 🔌 Supported Systems | 30+               |
+| 🌐 Languages         | English, Japanese |
+
+---
+
+## 🚀 Installation
+
+### 1. Download
+
+```bash
+cd resources
+git clone https://github.com/ImmersionNexus/in_bridge.git in_bridge
 ```
-bridge/
-├── fxmanifest.lua
-├── shared/
-│   ├── config.lua
-│   ├── main.lua
-│   └── utils.lua
-├── server/
-│   ├── main.lua
-│   └── modules/
-│       ├── callback.lua
-│       ├── player.lua
-│       ├── money.lua
-│       ├── inventory.lua
-│       ├── logger.lua
-│       ├── stash.lua
-│       ├── society.lua
-│       └── vehicle_extras.lua
-└── client/
-    ├── main.lua
-    └── modules/
-        ├── callback.lua
-        ├── notify.lua
-        ├── vehicles.lua
-        ├── draw.lua
-        ├── utils.lua
-        ├── target.lua
-        ├── progressbar.lua
-        ├── input.lua
-        ├── stash.lua
-        └── vehicle_extras.lua
-```
 
-## 🚀 インストール
-
-1. `bridge` フォルダをサーバーの `resources` フォルダに配置
-2. `server.cfg` に以下を追加:
+### 2. Add to server.cfg
 
 ```cfg
-ensure bridge
+# Start before other resources
+ensure in_bridge
 ```
 
-## 📖 使用方法
+### 3. Configuration (Optional)
 
-### 基本的な使い方
+Edit `shared/config.lua`:
 
 ```lua
-local Bridge = exports['bridge']:GetBridge()
+Config.Lang = 'en'  -- 'en' or 'ja'
 
--- フレームワークの準備を待つ
+Config.DefaultSettings = {
+    notify = "ox",    -- Notification system to use
+    textui = "jg",    -- TextUI system to use
+}
+```
+
+---
+
+## 📖 Usage
+
+### Basic
+
+```lua
+local Bridge = exports['in_bridge']:GetBridge()
+
+-- Wait for framework to be ready
 Bridge.WaitForReady()
+
+-- Framework detection
+if Bridge.FrameworkName == 'qbcore' then
+    print('QB-Core detected')
+end
 ```
 
-### プレイヤー機能 (Server)
+---
+
+## 🖥️ Server Side API
+
+<details>
+<summary><b>👤 Player Management</b></summary>
 
 ```lua
--- プレイヤーデータ取得
+-- Get player data
 local Player = Bridge.GetPlayer(source)
 
--- プレイヤー名取得
+-- Get player name
 local name = Bridge.GetPlayerName(source)
 
--- ジョブ取得
+-- Get identifier
+local identifier = Bridge.GetIdentifier(source)
+
+-- Get job
 local job, grade = Bridge.GetJob(source)
 
--- ジョブチェック
+-- Check job
 if Bridge.HasJob(source, 'police', 2) then
-    print('警察官 グレード2以上')
+    print('Police officer grade 2 or higher')
 end
 
--- 全プレイヤー取得
+-- Check multiple jobs
+if Bridge.HasJob(source, {'police', 'sheriff'}, 0) then
+    print('Law enforcement')
+end
+
+-- Get gang (QB-Core)
+local gang, gangGrade = Bridge.GetGang(source)
+
+-- Get all players
 local players = Bridge.GetPlayers()
 ```
 
-### お金の管理 (Server)
+</details>
+
+<details>
+<summary><b>💰 Money Management</b></summary>
 
 ```lua
--- 所持金取得
+-- Get money
 local cash = Bridge.GetMoney(source, 'cash')
 local bank = Bridge.GetMoney(source, 'bank')
 
--- お金を追加
-Bridge.AddMoney(source, 1000, 'cash', '給料')
+-- Add money
+Bridge.AddMoney(source, 1000, 'cash', 'Salary')
 
--- お金を削除
-Bridge.RemoveMoney(source, 500, 'bank', '購入')
+-- Remove money
+Bridge.RemoveMoney(source, 500, 'bank', 'Purchase')
 
--- 送金
-Bridge.TransferMoney(source, targetSource, 1000, '送金')
+-- Bank operations
+local bankMoney = Bridge.GetBankMoney(source)
+Bridge.AddBankMoney(source, 5000, 'Deposit')
+Bridge.RemoveBankMoney(source, 2000, 'Withdrawal')
+
+-- Transfer money
+Bridge.TransferMoney(source, targetSource, 1000, 'Transfer')
+
+-- Offline deposit
+Bridge.AddMoneyOffline(identifier, 1000, 'bank')
 ```
 
-### インベントリ (Server)
+</details>
+
+<details>
+<summary><b>📦 Inventory</b></summary>
 
 ```lua
--- アイテム追加
+-- Add item
 Bridge.AddItem(source, 'water', 5)
 
--- アイテム削除
+-- Add item with metadata
+Bridge.AddItem(source, 'weapon_pistol', 1, nil, {
+    serial = 'ABC123',
+    durability = 100
+})
+
+-- Remove item
 Bridge.RemoveItem(source, 'bread', 2)
 
--- アイテム所持チェック
+-- Check if has item
 if Bridge.HasItem(source, 'lockpick', 1) then
-    print('ロックピックを持っています')
+    print('Has lockpick')
 end
 
--- アイテム情報取得
+-- Get item info
 local item = Bridge.GetItem(source, 'phone')
 ```
 
-### スタッシュ/ストレージ (Server)
+</details>
+
+<details>
+<summary><b>📦 Stash/Storage</b></summary>
 
 ```lua
--- スタッシュ登録
+-- Register stash
 Bridge.RegisterStash('police_evidence', {
-    label = '証拠品保管庫',
+    label = 'Evidence Locker',
     slots = 50,
     weight = 100000,
     owner = false
 })
 
--- スタッシュを開く
+-- Open stash
 Bridge.OpenStash(source, 'police_evidence')
 
--- トランク/グローブボックス
+-- Trunk/Glovebox
 Bridge.OpenTrunk(source, plate)
 Bridge.OpenGlovebox(source, plate)
+
+-- Get stash items
+local items = Bridge.GetStashItems('police_evidence')
+
+-- Clear stash
+Bridge.ClearStash('police_evidence')
 ```
 
-### Society/Gang マネー (Server)
+</details>
+
+<details>
+<summary><b>🏢 Society/Gang Money</b></summary>
 
 ```lua
--- ソサエティの資金取得
+-- Get society money
 Bridge.GetSocietyMoney('police', function(money)
-    print('警察の資金: $' .. money)
+    print('Police funds: $' .. money)
 end)
 
--- 資金追加
+-- Add/Remove funds
 Bridge.AddSocietyMoney('police', 10000)
-
--- 資金削除
 Bridge.RemoveSocietyMoney('police', 5000)
 
--- ギャング資金 (QB-Core)
+-- Gang money (QB-Core only)
 local gangMoney = Bridge.GetGangMoney('ballas')
 Bridge.AddGangMoney('ballas', 5000)
+Bridge.RemoveGangMoney('ballas', 2000)
 ```
 
-### 車両キー (Server/Client)
+</details>
+
+<details>
+<summary><b>🔑 Vehicle Keys</b></summary>
 
 ```lua
--- キー付与 (Server)
+-- Give keys
 Bridge.GiveVehicleKeys(source, plate)
 
--- キー削除 (Server)
+-- Remove keys
 Bridge.RemoveVehicleKeys(source, plate)
 
--- キー所持チェック (Client)
-if Bridge.HasVehicleKeys(plate) then
-    print('キーを持っています')
-end
+-- Check keys
+local hasKeys = Bridge.HasVehicleKeys(source, plate)
 ```
 
-### Callback システム
+</details>
+
+<details>
+<summary><b>📝 Logging & Discord</b></summary>
 
 ```lua
--- Server側: Callback登録
+-- Basic log
+Bridge.Log(source, 'item_purchase', 'Player purchased an item')
+
+-- Discord Webhook (Simple)
+Bridge.SendWebhook(
+    'WEBHOOK_URL',
+    'Item Purchase',
+    'Player purchased an item',
+    0x00FF00  -- Green
+)
+
+-- Discord Embed (Detailed)
+Bridge.SendDiscordLog(
+    'WEBHOOK_URL',
+    'Server Logger',
+    'Player Action',
+    {
+        {name = 'Player', value = 'John Doe', inline = true},
+        {name = 'Action', value = 'Purchase', inline = true},
+        {name = 'Amount', value = '$1000', inline = true}
+    },
+    0x3498DB  -- Blue
+)
+
+-- Player action log
+Bridge.LogPlayerAction(source, 'WEBHOOK_URL', 'Vehicle Purchase', {
+    {name = 'Vehicle', value = 'Adder', inline = true},
+    {name = 'Price', value = '$50000', inline = true}
+}, 0x00FF00)
+```
+
+</details>
+
+<details>
+<summary><b>🔄 Callback System</b></summary>
+
+```lua
+-- Register callback
 Bridge.RegisterCallback('myresource:getData', function(source, cb, arg1, arg2)
     local data = {
         result = arg1 + arg2
@@ -189,35 +385,48 @@ Bridge.RegisterCallback('myresource:getData', function(source, cb, arg1, arg2)
     cb(data)
 end)
 
--- Client側: Callbackを呼び出し
-Bridge.TriggerCallback('myresource:getData', function(data)
-    print('結果:', data.result)
-end, 5, 10)
+-- Trigger client callback
+Bridge.TriggerClientCallback(source, 'myresource:clientData', function(result)
+    print('Result from client:', result)
+end, 'arg1', 'arg2')
 ```
 
-### 通知 (Client)
+</details>
+
+---
+
+## 🎮 Client Side API
+
+<details>
+<summary><b>🔔 Notifications</b></summary>
 
 ```lua
-Bridge.Notify('タイトル', 'メッセージ', 'success', 5000)
+Bridge.Notify('Title', 'Message', 'success', 5000)
 -- type: 'success', 'error', 'info', 'warning'
 ```
 
-### TextUI (Client)
+</details>
+
+<details>
+<summary><b>📺 TextUI</b></summary>
 
 ```lua
--- 表示
-Bridge.ShowTextUI('[E] ドアを開ける', 'right')
+-- Show
+Bridge.ShowTextUI('[E] Open Door', 'right')
 
--- 非表示
+-- Hide
 Bridge.HideTextUI()
 ```
 
-### Progress Bar (Client)
+</details>
+
+<details>
+<summary><b>⏳ Progress Bar</b></summary>
 
 ```lua
 local success = Bridge.ShowProgress({
     duration = 5000,
-    label = '修理中...',
+    label = 'Repairing...',
     canCancel = true,
     disable = {
         move = true,
@@ -238,91 +447,100 @@ local success = Bridge.ShowProgress({
 })
 
 if success then
-    print('修理完了')
+    print('Repair complete')
 else
-    print('修理キャンセル')
+    print('Repair cancelled')
+end
+
+-- Cancel
+Bridge.CancelProgress()
+
+-- Check if active
+if Bridge.IsProgressActive() then
+    print('Progress is active')
 end
 ```
 
-### Input Dialog (Client)
+</details>
+
+<details>
+<summary><b>📝 Input/Menu</b></summary>
 
 ```lua
+-- Input Dialog
 local input = Bridge.ShowInput({
-    header = 'プレイヤー情報',
+    header = 'Player Info',
     inputs = {
-        {
-            name = 'name',
-            label = '名前',
-            type = 'text',
-            required = true
-        },
-        {
-            name = 'age',
-            label = '年齢',
-            type = 'number',
-            required = true
-        }
+        {name = 'name', label = 'Name', type = 'text', required = true},
+        {name = 'age', label = 'Age', type = 'number', required = true}
     }
 })
 
 if input then
-    print('名前:', input.name)
-    print('年齢:', input.age)
+    print('Name:', input.name)
+    print('Age:', input.age)
 end
-```
 
-### Menu/Context (Client)
-
-```lua
+-- Context Menu
 Bridge.ShowMenu({
     id = 'my_menu',
-    title = 'メニュー',
+    title = 'Menu',
     options = {
         {
-            title = 'オプション1',
-            description = '説明文',
+            title = 'Option 1',
+            description = 'Description',
             icon = 'fas fa-star',
             onSelect = function()
-                print('オプション1が選択されました')
+                print('Selected')
             end
-        },
-        {
-            title = 'オプション2',
-            event = 'myresource:option2',
-            args = {data = 'test'}
         }
     }
 })
+
+-- Close menu
+Bridge.CloseMenu()
+
+-- Confirm dialog
+local confirmed = Bridge.ShowConfirm({
+    header = 'Confirm',
+    message = 'Are you sure you want to delete?'
+})
+
+-- Skill check
+local success = Bridge.ShowSkillCheck('medium')
 ```
 
-### Target System (Client)
+</details>
+
+<details>
+<summary><b>🎯 Target System</b></summary>
 
 ```lua
--- エンティティにターゲット追加
+-- Entity target
 Bridge.AddTargetEntity(entity, {
     {
         name = 'interact',
-        label = '話しかける',
+        label = 'Talk',
         icon = 'fas fa-comments',
         onSelect = function(data)
-            print('話しかけました')
+            print('Talking')
         end
     }
 })
 
--- モデルにターゲット追加
+-- Model target
 Bridge.AddTargetModel({'prop_atm_01', 'prop_atm_02'}, {
     {
         name = 'use_atm',
-        label = 'ATMを使う',
+        label = 'Use ATM',
         icon = 'fas fa-credit-card',
         onSelect = function()
-            -- ATMを開く処理
+            -- ATM logic
         end
     }
 })
 
--- ボックスゾーン追加
+-- Box zone
 local zoneId = Bridge.AddBoxZone({
     name = 'shop_zone',
     coords = vector3(0.0, 0.0, 0.0),
@@ -332,135 +550,365 @@ local zoneId = Bridge.AddBoxZone({
     options = {
         {
             name = 'open_shop',
-            label = 'ショップを開く',
+            label = 'Open Shop',
             icon = 'fas fa-shopping-cart',
             onSelect = function()
-                print('ショップを開きました')
+                print('Shop opened')
             end
         }
     }
 })
+
+-- Remove zone
+Bridge.RemoveZone(zoneId)
+
+-- Global player/vehicle targets
+Bridge.AddGlobalPlayer(options)
+Bridge.AddGlobalVehicle(options)
 ```
 
-### 車両 (Client)
+</details>
+
+<details>
+<summary><b>🚗 Vehicles</b></summary>
 
 ```lua
--- 車両スポーン
+-- Spawn vehicle
 Bridge.SpawnVehicle('adder', vector3(0, 0, 0), 0.0, function(vehicle)
-    print('車両がスポーンしました: ' .. vehicle)
+    print('Vehicle spawned:', vehicle)
 end)
 
--- 最も近い車両を取得
-local vehicle, distance = Bridge.GetClosestVehicle(GetEntityCoords(PlayerPedId()), 5.0)
+-- Delete vehicle
+Bridge.DeleteVehicle(vehicle)
 
--- 燃料取得/設定
+-- Get player vehicle
+local vehicle = Bridge.GetPlayerVehicle()
+
+-- Get closest vehicle
+local vehicle, distance = Bridge.GetClosestVehicle(coords, 5.0)
+
+-- Fuel
 local fuel = Bridge.GetVehicleFuel(vehicle)
-Bridge.SetVehicleFuel(vehicle, 50.0)
+Bridge.SetVehicleFuel(vehicle, 100.0)
+
+-- Check keys
+if Bridge.HasVehicleKeys(plate) then
+    print('Has keys')
+end
 ```
 
-### Logger (Server)
+</details>
+
+<details>
+<summary><b>🎨 Drawing & UI</b></summary>
 
 ```lua
--- 基本ログ
-Bridge.Log(source, 'item_purchase', 'プレイヤーがアイテムを購入しました')
+-- 3D Text
+Bridge.DrawText3D(coords, 'Text')
 
--- Discord Webhook
-Bridge.SendWebhook(
-    'WEBHOOK_URL',
-    'アイテム購入',
-    'プレイヤーがアイテムを購入しました',
-    0x00FF00
-)
+-- Marker
+Bridge.DrawMarker(1, coords, vector3(1.0, 1.0, 1.0), {r=255, g=0, b=0, a=100})
 
--- 詳細なDiscordログ
-Bridge.SendDiscordLog(
-    'WEBHOOK_URL',
-    'Server Logger',
-    'プレイヤーアクション',
-    {
-        {name = 'プレイヤー', value = 'John Doe', inline = true},
-        {name = 'アクション', value = '購入', inline = true},
-        {name = '金額', value = '$1000', inline = true}
-    },
-    0x3498DB
-)
-
--- プレイヤーアクションログ
-Bridge.LogPlayerAction(source, 'WEBHOOK_URL', '車両購入', {
-    {name = '車両', value = 'Adder', inline = true},
-    {name = '価格', value = '$50000', inline = true}
-}, 0x00FF00)
+-- Help text
+Bridge.ShowHelpText('[E] Interact')
 ```
 
-### Utils (共通)
+</details>
+
+<details>
+<summary><b>🔄 Callback (Client)</b></summary>
 
 ```lua
--- 距離計算
+-- Trigger server callback
+Bridge.TriggerCallback('myresource:getData', function(data)
+    print('Result:', data.result)
+end, arg1, arg2)
+
+-- Register client callback
+Bridge.RegisterClientCallback('myresource:clientCheck', function(cb, data)
+    cb(true)
+end)
+```
+
+</details>
+
+---
+
+## 🔧 Shared API (Utils)
+
+<details>
+<summary><b>📐 Distance & Coordinates</b></summary>
+
+```lua
 local distance = Bridge.GetDistance(coords1, coords2)
+local isNearby = Bridge.IsPlayerNearby(coords, 5.0)
+```
 
--- テーブルユーティリティ
+</details>
+
+<details>
+<summary><b>📋 Table Operations</b></summary>
+
+```lua
 local isEmpty = Bridge.IsTableEmpty(tbl)
 local copy = Bridge.DeepCopy(tbl)
 local contains = Bridge.TableContains(tbl, value)
+local keys = Bridge.GetTableKeys(tbl)
+```
 
--- 文字列ユーティリティ
+</details>
+
+<details>
+<summary><b>📝 String Operations</b></summary>
+
+```lua
 local parts = Bridge.SplitString("hello,world", ",")
 local trimmed = Bridge.Trim("  text  ")
+local capitalized = Bridge.Capitalize("hello")
+```
 
--- 数値ユーティリティ
+</details>
+
+<details>
+<summary><b>🔢 Number Operations</b></summary>
+
+```lua
 local clamped = Bridge.Clamp(value, 0, 100)
 local rounded = Bridge.Round(3.14159, 2)
+local random = Bridge.Random(1, 100)
+```
 
--- エラーハンドリング
+</details>
+
+<details>
+<summary><b>⏰ Time Operations</b></summary>
+
+```lua
+local hours, minutes, seconds = Bridge.MsToTime(360000)
+local formatted = Bridge.FormatTime(hours, minutes, seconds)
+```
+
+</details>
+
+<details>
+<summary><b>🧮 Math Functions</b></summary>
+
+```lua
+local lerped = Bridge.Lerp(0, 100, 0.5)  -- 50
+local angle = Bridge.GetAngleBetweenPoints(x1, y1, x2, y2)
+```
+
+</details>
+
+<details>
+<summary><b>⚠️ Error Handling</b></summary>
+
+```lua
 Bridge.Try(function()
-    -- 実行したいコード
-    error("テストエラー")
+    -- Code to execute
+    error("Test error")
 end).catch(function(err)
-    print("エラー:", err)
+    print("Error:", err)
 end).finally(function()
-    print("最終処理")
+    print("Cleanup")
+end)
+
+-- Simple version
+local success, result = Bridge.SafeCall(function()
+    return "OK"
 end)
 ```
 
-## ⚙️ Config設定
+</details>
 
-`shared/config.lua` でデフォルト設定を変更できます:
+<details>
+<summary><b>🌐 Localization</b></summary>
 
 ```lua
-Config.DefaultSettings = {
-    notify = "ox",    -- "qb" | "esx" | "ox" | "okok" | "ss" | "standalone"
-    textui = "jg",    -- "okok" | "jg" | "ss" | "qb" | "standalone"
-}
+-- Get localized text
+local text = Bridge.L('not_enough_money')
+local formatted = Bridge.L('money_added', 1000)
+
+-- Change language
+Bridge.SetLang('en')
+
+-- Get available languages
+local langs = Bridge.GetAvailableLanguages()
+
+-- Add custom locale
+Bridge.AddLocale('en', 'custom_key', 'Custom text')
+Bridge.AddLocales('en', {
+    key1 = 'Text 1',
+    key2 = 'Text 2'
+})
 ```
 
-## 🔧 依存関係
+</details>
 
-### 必須
-- なし (スタンドアロンで動作)
+---
 
-### オプション
-- `ox_lib` - 推奨 (Menu, Input, Progress, Target等)
-- `oxmysql` - データベース操作に使用
-- フレームワーク (qb-core, es_extended, qbox のいずれか)
-- インベントリシステム
-- 通知システム
-- その他の連携リソース
+## 📁 File Structure
 
-## 📝 ライセンス
+```
+in_bridge/
+├── 📄 fxmanifest.lua
+├── 📖 README.md
+├── 📖 README_JP.md
+├── 📖 INSTALL.md
+├── 📖 FEATURES.md
+├── 💻 EXAMPLES.lua
+│
+├── 📂 shared/
+│   ├── config.lua          # Configuration
+│   ├── locales.lua         # Localization
+│   ├── main.lua            # Initialization
+│   └── utils.lua           # Utilities
+│
+├── 📂 server/
+│   ├── main.lua
+│   └── modules/
+│       ├── callback.lua        # Callbacks
+│       ├── player.lua          # Player management
+│       ├── money.lua           # Money management
+│       ├── inventory.lua       # Inventory
+│       ├── logger.lua          # Logging & Discord
+│       ├── stash.lua           # Storage
+│       ├── society.lua         # Society funds
+│       └── vehicle_extras.lua  # Vehicle keys
+│
+└── 📂 client/
+    ├── main.lua
+    └── modules/
+        ├── callback.lua        # Callbacks
+        ├── notify.lua          # Notifications
+        ├── vehicles.lua        # Vehicles
+        ├── draw.lua            # Drawing & UI
+        ├── utils.lua           # Utilities
+        ├── target.lua          # Target system
+        ├── progressbar.lua     # Progress bar
+        ├── input.lua           # Input & Menu
+        ├── stash.lua           # Storage
+        └── vehicle_extras.lua  # Fuel & Keys
+```
 
-MIT License
+---
 
-## 🤝 貢献
+## ⚙️ Dependencies
 
-プルリクエストを歓迎します!
+### Required
 
-## 💬 サポート
+None (Works standalone)
 
-問題が発生した場合は、GitHubのIssuesで報告してください。
+### Recommended
 
-## 🔄 更新履歴
+| Resource  | Purpose                             |
+| --------- | ----------------------------------- |
+| `ox_lib`  | Menu, Input, Progress, Target, etc. |
+| `oxmysql` | Database operations                 |
 
-### v2.0.0
-- 初回リリース
-- QB-Core, ESX, QBox対応
-- 全主要機能実装
+### Optional
+
+- Framework (qb-core, es_extended, qbox)
+- Inventory system
+- Notification system
+- Target system
+- Other integrated resources
+
+---
+
+## ❓ FAQ
+
+<details>
+<summary><b>Q: Can I use QB-Core and ESX at the same time?</b></summary>
+
+A: No, please use only one framework.
+
+</details>
+
+<details>
+<summary><b>Q: Can I use it standalone?</b></summary>
+
+A: Yes, basic functions work without any framework.
+
+</details>
+
+<details>
+<summary><b>Q: Is QBox supported?</b></summary>
+
+A: Yes, QBox is fully supported as it's based on QB-Core.
+
+</details>
+
+<details>
+<summary><b>Q: Can I use it with a custom framework?</b></summary>
+
+A: Yes, you can customize the files in the `modules/` folder.
+
+</details>
+
+<details>
+<summary><b>Q: How do I add a new notification system?</b></summary>
+
+A: Edit `client/modules/notify.lua` and add a new condition branch for your system.
+
+</details>
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome!
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE) for details
+
+---
+
+## 🔄 Changelog
+
+### v2.0.0 (Latest)
+
+- ✨ Added Callback system
+- ✨ Integrated Target system
+- ✨ Integrated Progress Bar
+- ✨ Integrated Input/Menu system
+- ✨ Added Stash/Storage system
+- ✨ Added Society/Gang money management
+- ✨ Integrated Vehicle Keys system
+- ✨ Integrated Fuel system
+- ✨ Added localization (English/Japanese)
+- ✨ Added error handling (Try-Catch)
+- 🎨 Complete documentation overhaul
+
+### v1.0.0
+
+- 🎉 Initial release
+- ✅ QB-Core, ESX, QBox support
+- ✅ Basic features implemented
+
+---
+
+## 💬 Support
+
+- 🐛 Bug Reports: [GitHub Issues](https://github.com/ImmersionNexus/in_bridge/issues)
+- 💡 Feature Requests: [GitHub Issues](https://github.com/ImmersionNexus/in_bridge/issues)
+- 💬 Discord: [Join our server](https://discord.gg/yourdiscord)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by [ImmersionNexus](https://github.com/ImmersionNexus)**
+
+⭐ If this project helped you, please give it a star!
+
+</div>
